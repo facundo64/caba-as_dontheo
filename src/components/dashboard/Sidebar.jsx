@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../services/firebase';
 import { useAuth } from '../../context/AuthContext.jsx';
-import { BeefIcon, ChartIcon, UsersIcon, TicketIcon, LogoutIcon, ChevronDownIcon, ShoppingCartIcon, HistoryIcon, QualtechLogo } from '../common/icons';
+import { BeefIcon, ChartIcon, UsersIcon, TicketIcon, LogoutIcon, ChevronDownIcon, ShoppingCartIcon, HistoryIcon, QualtechLogo } from '../common/Icons.jsx';
 
 const Sidebar = ({ activeView, setActiveView }) => {
     const [isSalesMenuOpen, setIsSalesMenuOpen] = useState(false);
