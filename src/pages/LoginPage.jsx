@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../services/firebase';
-import { QualtechLogo } from '../components/common/Icons';
+import { QualtechLogo } from '../components/common/icons.jsx';
 
 const LoginPage = ({ authError, setAuthError }) => {
     const [email, setEmail] = useState('');

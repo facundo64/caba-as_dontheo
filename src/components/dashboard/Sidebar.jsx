@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../services/firebase';
-import { useAuth } from '../../context/AuthContext';
-import { BeefIcon, ChartIcon, UsersIcon, TicketIcon, LogoutIcon, ChevronDownIcon, ShoppingCartIcon, HistoryIcon, QualtechLogo } from '../common/Icons';
+import { useAuth } from '../../context/AuthContext.jsx';
+import { BeefIcon, ChartIcon, UsersIcon, TicketIcon, LogoutIcon, ChevronDownIcon, ShoppingCartIcon, HistoryIcon, QualtechLogo } from '../common/icons';
 
 const Sidebar = ({ activeView, setActiveView }) => {
     const [isSalesMenuOpen, setIsSalesMenuOpen] = useState(false);
