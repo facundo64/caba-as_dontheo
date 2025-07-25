@@ -1,6 +1,14 @@
+import React, { useRef, useState } from 'react';
+import { QualtechLogo, PrintIcon, FileDownIcon } from '../common/Icons.jsx';
 
-import React, { useRef } from 'react';
-import { QualtechLogo, PrintIcon, FileDownIcon } from '../common/icons.jsx';
+
+const formatDate = (timestamp) => {
+    if (!timestamp) return new Date(); 
+    if (timestamp.seconds) {
+        return new Date(timestamp.seconds * 1000);
+    }
+    return new Date(timestamp);
+};
 
 const PdfTicket = React.forwardRef(({ saleData }, ref) => {
     if (!saleData) return null;
@@ -21,7 +29,7 @@ const PdfTicket = React.forwardRef(({ saleData }, ref) => {
                 <div className="text-right">
                     <h1 className="text-3xl font-bold text-gray-700">RECIBO</h1>
                     <p className="text-sm">Recibo N°: {saleData.id.substring(0, 8)}</p>
-                    <p className="text-sm">Fecha: {new Date(saleData.createdAt.seconds * 1000).toLocaleDateString()}</p>
+                    <p className="text-sm">Fecha: {formatDate(saleData.createdAt).toLocaleDateString()}</p>
                 </div>
             </div>
             <div className="mb-8">
@@ -50,8 +58,8 @@ const PdfTicket = React.forwardRef(({ saleData }, ref) => {
             </table>
             <div className="flex justify-end">
                 <div className="w-1/3">
-                    <div className="flex justify-between font-bold text-xl">
-                        <span>TOTAL:</span>
+                    <div className="flex justify-between font-bold text-xl bg-gray-200 p-4 rounded">
+                        <span>TOTAL A PAGAR:</span>
                         <span>${saleData.total.toFixed(2)}</span>
                     </div>
                 </div>
@@ -72,14 +80,14 @@ const ThermalTicket = ({ saleData }) => {
         cuit: "30-12345678-9",
     };
     return (
-        <div id="thermal-ticket-content" className="font-mono text-black bg-white p-2" style={{width: '300px'}}>
+        <div id="thermal-ticket-content" className="font-mono text-black bg-white p-2" style={{width: '288px'}}>
             <div className="text-center">
-                <h2 className="text-xl font-bold">{companyDetails.name}</h2>
+                <h2 className="text-lg font-bold">{companyDetails.name}</h2>
                 <p className="text-xs">{companyDetails.address}</p>
                 <p className="text-xs">CUIT: {companyDetails.cuit}</p>
             </div>
             <hr className="my-2 border-dashed border-black"/>
-            <p className="text-xs">Fecha: {new Date(saleData.createdAt.seconds * 1000).toLocaleString()}</p>
+            <p className="text-xs">Fecha: {formatDate(saleData.createdAt).toLocaleString()}</p>
             <p className="text-xs">Factura B Nro: {saleData.id.substring(0, 8)}</p>
             <p className="text-xs">Cliente: Consumidor Final</p>
             <hr className="my-2 border-dashed border-black"/>
@@ -104,7 +112,7 @@ const ThermalTicket = ({ saleData }) => {
                 </tbody>
             </table>
             <hr className="my-2 border-dashed border-black"/>
-            <div className="text-right font-bold">
+            <div className="text-right font-bold text-base">
                 <p>TOTAL: ${saleData.total.toFixed(2)}</p>
             </div>
             <hr className="my-2 border-dashed border-black"/>
@@ -116,6 +124,7 @@ const ThermalTicket = ({ saleData }) => {
 };
 
 const TicketModal = ({ isOpen, onClose, saleData }) => {
+    const [style, setStyle] = useState('pdf'); 
     const pdfRef = useRef();
 
     const handlePrintPdf = () => {
@@ -160,25 +169,33 @@ const TicketModal = ({ isOpen, onClose, saleData }) => {
         printWindow.close();
     };
 
-    if (!isOpen) return null;
+    if (!isOpen || !saleData) return null;
     return (
         <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center p-4">
             <div className="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-3xl transform transition-all duration-300">
                 <div className="flex justify-between items-center p-5 border-b border-gray-700">
                     <h3 className="text-xl font-semibold text-white">Venta Finalizada</h3>
-                    <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    </button>
+                     <div className="flex items-center gap-2">
+                        <button onClick={() => setStyle('pdf')} className={`px-3 py-1 rounded-md text-sm ${style === 'pdf' ? 'bg-amber-500 text-white' : 'bg-gray-600 text-gray-300'}`}>Estilo Factura</button>
+                        <button onClick={() => setStyle('thermal')} className={`px-3 py-1 rounded-md text-sm ${style === 'thermal' ? 'bg-amber-500 text-white' : 'bg-gray-600 text-gray-300'}`}>Estilo Ticket</button>
+                        <button onClick={style === 'pdf' ? handlePrintPdf : handlePrintThermal} className="px-3 py-1 rounded-md bg-blue-500 text-white">Imprimir</button>
+                        <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                   </div>
                 </div>
-                <div className="p-6 max-h-[70vh] overflow-y-auto">
-                    <PdfTicket ref={pdfRef} saleData={saleData} />
+                <div className="p-6 bg-gray-300 overflow-y-auto" style={{ maxHeight: '70vh' }}>
+                    {style === 'pdf' ? (
+                        <PdfTicket ref={pdfRef} saleData={saleData} />
+                    ) : (
+                        <div className="flex justify-center">
+                           <ThermalTicket saleData={saleData} />
+                        </div>
+                    )}
+                    {/* Contenedor oculto para la impresión térmica */}
                     <div className="hidden">
                         <ThermalTicket saleData={saleData} />
                     </div>
-                </div>
-                <div className="flex justify-end gap-4 p-5 border-t border-gray-700">
-                    <button onClick={handlePrintThermal} className="flex items-center gap-2 bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded-lg transition-colors"><PrintIcon/>Imprimir Ticket Térmico</button>
-                    <button onClick={handlePrintPdf} className="flex items-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg transition-colors"><FileDownIcon/>Descargar PDF</button>
                 </div>
             </div>
         </div>

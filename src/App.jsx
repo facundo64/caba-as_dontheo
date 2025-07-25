@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
@@ -13,8 +13,14 @@ function App() {
 
 const Main = () => {
     const { currentUser } = useAuth();
-  
-    return currentUser ? <DashboardPage /> : <LoginPage />;
+    const [authError, setAuthError] = useState(''); 
+
+    return currentUser ? 
+        <DashboardPage /> : 
+        <LoginPage 
+            authError={authError} 
+            setAuthError={setAuthError}
+        />;
 }
 
 export default App;

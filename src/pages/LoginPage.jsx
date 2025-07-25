@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../services/firebase';
-import { QualtechLogo } from '../components/common/icons.jsx';
+import { auth } from '../services/firebase.js';
+import { QualtechLogo } from '../components/common/Icons.jsx';
 
 const LoginPage = ({ authError, setAuthError }) => {
     const [email, setEmail] = useState('');
@@ -40,7 +40,8 @@ const LoginPage = ({ authError, setAuthError }) => {
     return (
         <div className="min-h-screen bg-gray-900 flex flex-col justify-center items-center p-4 font-sans" style={{backgroundImage: `url('https://www.transparenttextures.com/patterns/dark-denim-3.png')`}}>
             <div className="w-full max-w-md">
-                <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl p-8 md:p-10">
+            
+                <div className="bg-gray-800 border border-gray-700 rounded-2xl shadow-2xl p-8 md:p-10 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-amber-500/20">
                     <div className="flex justify-center mb-6">
                         <QualtechLogo className="h-16 w-16 text-amber-500 fill-current" />
                     </div>
@@ -58,7 +59,10 @@ const LoginPage = ({ authError, setAuthError }) => {
                             <label className="text-sm font-bold text-gray-300 block mb-2">Contraseña</label>
                             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 bg-gray-700 text-white rounded-md border border-gray-600 focus:ring-2 focus:ring-amber-500" placeholder="••••••••" required />
                         </div>
-                        <button type="submit" className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105">
+                        <button 
+                            type="submit" 
+                            className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-4"
+                        >
                             {isRegister ? 'Registrarse' : 'Iniciar Sesión'}
                         </button>
                     </form>
