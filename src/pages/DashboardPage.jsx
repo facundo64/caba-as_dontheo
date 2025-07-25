@@ -1,38 +1,68 @@
 import React, { useState } from 'react';
-import Layout from '../components/dashboard/Layout.jsx';
+import Header from '../components/dashboard/Header.jsx';
+import MainMenu from '../components/dashboard/MainMenu.jsx';
 import StockManagement from '../components/inventory/StockManagement.jsx';
+import StockEntry from '../components/inventory/StockEntry.jsx';
+import StockMovements from '../components/inventory/StockMovements.jsx'; 
 import SalesPOS from '../components/sales/SalesPOS.jsx';
 import Placeholder from '../components/common/Placeholder.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 
 const DashboardPage = () => {
-    const [activeView, setActiveView] = useState('inventory');
+    const [activeView, setActiveView] = useState('menu'); 
     const { currentUser } = useAuth();
-    const appId = 'qualtech-saas-demo'; // Este ID se usa para las rutas de Firestore
+    const appId = 'qualtech-saas-demo';
 
-    
     const renderContent = () => {
+        if (activeView === 'menu') {
+            return <MainMenu onMenuSelect={setActiveView} />;
+        }
+
+        let moduleContent;
         switch (activeView) {
             case 'inventory':
-                return <StockManagement user={currentUser} appId={appId} />;
+                moduleContent = <StockManagement />;
+                break;
+            case 'stockEntry':
+                moduleContent = <StockEntry />;
+                break;
+            case 'stockMovements':
+                moduleContent = <StockMovements />;
+                break;
             case 'pos':
-                return <SalesPOS user={currentUser} appId={appId} />;
-            case 'salesHistory':
-                return <Placeholder title="Historial de Ventas" message="Aquí podrás ver todas las transacciones realizadas." />;
+                moduleContent = <SalesPOS />;
+                break;
             case 'reports':
-                return <Placeholder title="Generación de Reportes" message="Visualiza reportes de ventas, análisis de inventario y rendimiento." />;
+                moduleContent = <Placeholder title="Generación de Reportes" message="Visualiza reportes de ventas, análisis de inventario y rendimiento." />;
+                break;
             case 'users':
-                return <Placeholder title="Gestión de Usuarios" message="Administra los roles y permisos de tus empleados." />;
+                moduleContent = <Placeholder title="Gestión de Usuarios" message="Administra los roles y permisos de tus empleados." />;
+                break;
             default:
-                return <StockManagement user={currentUser} appId={appId} />;
+                moduleContent = <MainMenu onMenuSelect={setActiveView} />;
+                break;
         }
+        
+        return (
+            <div className="p-4 sm:p-6 md:p-8">
+                <button 
+                    onClick={() => setActiveView('menu')}
+                    className="text-amber-400 hover:text-amber-300 mb-6"
+                >
+                    &larr; Volver al Menú Principal
+                </button>
+                {moduleContent}
+            </div>
+        );
     };
 
     return (
-        // El Layout envuelve el contenido principal y le pasa el estado de la vista activa
-        <Layout activeView={activeView} setActiveView={setActiveView}>
-            {renderContent()}
-        </Layout>
+        <div className="flex flex-col h-screen bg-gray-900 text-white font-sans">
+            <Header />
+            <main className="flex-1 overflow-y-auto">
+                {renderContent()}
+            </main>
+        </div>
     );
 };
 
