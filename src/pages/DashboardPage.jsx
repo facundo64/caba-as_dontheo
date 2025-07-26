@@ -4,6 +4,7 @@ import MainMenu from '../components/dashboard/MainMenu.jsx';
 import StockManagement from '../components/inventory/StockManagement.jsx';
 import StockEntry from '../components/inventory/StockEntry.jsx';
 import StockMovements from '../components/inventory/StockMovements.jsx'; 
+import CustomerManagement from '../components/common/CustomerManagement.jsx';
 import SalesPOS from '../components/sales/SalesPOS.jsx';
 import Placeholder from '../components/common/Placeholder.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -32,6 +33,9 @@ const DashboardPage = () => {
             case 'pos':
                 moduleContent = <SalesPOS />;
                 break;
+            case 'customers':
+                moduleContent = <CustomerManagement />;
+                break; 
             case 'reports':
                 moduleContent = <Placeholder title="Generación de Reportes" message="Visualiza reportes de ventas, análisis de inventario y rendimiento." />;
                 break;
