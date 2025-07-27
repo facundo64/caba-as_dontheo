@@ -5,7 +5,7 @@ import StockManagement from '../components/inventory/StockManagement.jsx';
 import StockEntry from '../components/inventory/StockEntry.jsx';
 import StockMovements from '../components/inventory/StockMovements.jsx'; 
 import CustomerManagement from '../components/common/CustomerManagement.jsx';
-import SalesPOS from '../components/sales/SalesPOS.jsx';
+import CashRegister from '../components/sales/CashRegister.jsx';
 import Placeholder from '../components/common/Placeholder.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -31,7 +31,7 @@ const DashboardPage = () => {
                 moduleContent = <StockMovements />;
                 break;
             case 'pos':
-                moduleContent = <SalesPOS />;
+                moduleContent = <CashRegister />;
                 break;
             case 'customers':
                 moduleContent = <CustomerManagement />;

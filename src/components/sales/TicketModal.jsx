@@ -3,7 +3,7 @@ import { QualtechLogo, PrintIcon, FileDownIcon } from '../common/Icons.jsx';
 
 
 const formatDate = (timestamp) => {
-    if (!timestamp) return new Date(); 
+    if (!timestamp) return new Date();
     if (timestamp.seconds) {
         return new Date(timestamp.seconds * 1000);
     }
@@ -17,6 +17,9 @@ const PdfTicket = React.forwardRef(({ saleData }, ref) => {
         address: "Av. Siempre Viva 742, Springfield",
         cuit: "30-12345678-9",
     };
+
+    
+    const itemsToRender = saleData.cart || [];
 
     return (
         <div ref={ref} className="bg-white text-black p-8 font-sans">
@@ -34,7 +37,7 @@ const PdfTicket = React.forwardRef(({ saleData }, ref) => {
             </div>
             <div className="mb-8">
                 <h3 className="font-bold border-b pb-1 mb-2">Cliente:</h3>
-                <p>Consumidor Final</p>
+                <p>{saleData.customer?.name || 'Consumidor Final'}</p>
             </div>
             <table className="w-full mb-8">
                 <thead className="bg-gray-200">
@@ -46,7 +49,7 @@ const PdfTicket = React.forwardRef(({ saleData }, ref) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {saleData.items.map(item => (
+                    {itemsToRender.map(item => (
                         <tr key={item.id} className="border-b">
                             <td className="p-2">{item.name}</td>
                             <td className="p-2 text-right">{item.quantity}</td>
@@ -79,6 +82,9 @@ const ThermalTicket = ({ saleData }) => {
         address: "Av. Siempre Viva 742, Springfield",
         cuit: "30-12345678-9",
     };
+
+    const itemsToRender = saleData.cart || [];
+
     return (
         <div id="thermal-ticket-content" className="font-mono text-black bg-white p-2" style={{width: '288px'}}>
             <div className="text-center">
@@ -89,7 +95,7 @@ const ThermalTicket = ({ saleData }) => {
             <hr className="my-2 border-dashed border-black"/>
             <p className="text-xs">Fecha: {formatDate(saleData.createdAt).toLocaleString()}</p>
             <p className="text-xs">Factura B Nro: {saleData.id.substring(0, 8)}</p>
-            <p className="text-xs">Cliente: Consumidor Final</p>
+            <p className="text-xs">Cliente: {saleData.customer?.name || 'Consumidor Final'}</p>
             <hr className="my-2 border-dashed border-black"/>
             <table className="w-full text-xs">
                 <thead>
@@ -101,7 +107,7 @@ const ThermalTicket = ({ saleData }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {saleData.items.map(item => (
+                    {itemsToRender.map(item => (
                         <tr key={item.id}>
                             <td>{item.name}</td>
                             <td className="text-right">{item.quantity}</td>
@@ -124,7 +130,7 @@ const ThermalTicket = ({ saleData }) => {
 };
 
 const TicketModal = ({ isOpen, onClose, saleData }) => {
-    const [style, setStyle] = useState('pdf'); 
+    const [style, setStyle] = useState('pdf'); // 'pdf' or 'thermal'
     const pdfRef = useRef();
 
     const handlePrintPdf = () => {
