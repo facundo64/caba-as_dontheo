@@ -8,6 +8,7 @@ import CustomerManagement from '../components/common/CustomerManagement.jsx';
 import CashRegister from '../components/sales/CashRegister.jsx';
 import Placeholder from '../components/common/Placeholder.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import ReportsPage from '../components/reports/ReportsPage.jsx';
 
 const DashboardPage = () => {
     const [activeView, setActiveView] = useState('menu'); 
@@ -37,7 +38,7 @@ const DashboardPage = () => {
                 moduleContent = <CustomerManagement />;
                 break; 
             case 'reports':
-                moduleContent = <Placeholder title="Generación de Reportes" message="Visualiza reportes de ventas, análisis de inventario y rendimiento." />;
+                moduleContent = <ReportsPage />;
                 break;
             case 'users':
                 moduleContent = <Placeholder title="Gestión de Usuarios" message="Administra los roles y permisos de tus empleados." />;
