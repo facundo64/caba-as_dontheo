@@ -6,7 +6,9 @@ import StockEntry from '../components/inventory/StockEntry.jsx';
 import StockMovements from '../components/inventory/StockMovements.jsx'; 
 import CustomerManagement from '../components/common/CustomerManagement.jsx';
 import CashRegister from '../components/sales/CashRegister.jsx';
+import LogisticsPage from '../components/logistics/LogisticsPage.jsx';
 import Placeholder from '../components/common/Placeholder.jsx';
+import UserManagement from '../components/users/UserMagnament.jsx'; 
 import { useAuth } from '../context/AuthContext.jsx';
 import ReportsPage from '../components/reports/ReportsPage.jsx';
 
@@ -37,11 +39,14 @@ const DashboardPage = () => {
             case 'customers':
                 moduleContent = <CustomerManagement />;
                 break; 
+            case 'logistics':
+                moduleContent = <LogisticsPage />;
+                break;
             case 'reports':
                 moduleContent = <ReportsPage />;
                 break;
             case 'users':
-                moduleContent = <Placeholder title="Gestión de Usuarios" message="Administra los roles y permisos de tus empleados." />;
+                moduleContent = <UserManagement />;
                 break;
             default:
                 moduleContent = <MainMenu onMenuSelect={setActiveView} />;
